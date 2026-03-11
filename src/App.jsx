@@ -1,32 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+
+import { useState } from "react"
+import notificationsData from "./notifications"
+import NotificationList from "./components/NotificationList"
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [notifications, setNotifications] = useState(notificationsData)
+
+  const clearNotification = (id) => {
+    setNotifications(
+      notifications.filter((notification) => notification.id !== id)
+    )
+  }
+
+  const clearAll = () => {
+    setNotifications([])
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="container mt-5">
+
+      <h1 className="mb-3">
+        Notifications ({notifications.length})
+      </h1>
+
+      <button 
+        className="btn btn-danger mb-3"
+        onClick={clearAll}
+      >
+        Clear All
+      </button>
+
+      <NotificationList>
+        {notifications.map((notification) => (
+          <div key={notification.id} className="card mb-3">
+            <div className="card-body">
+
+              <h5>{notification.name}</h5>
+              <p>{notification.message}</p>
+
+              <button
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => clearNotification(notification.id)}
+              >
+                Clear
+              </button>
+
+            </div>
+          </div>
+        ))}
+      </NotificationList>
+
     </div>
   )
 }
